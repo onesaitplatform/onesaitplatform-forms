@@ -1,4 +1,9 @@
 
+This application is created with Vue2 technology
+https://v2.vuejs.org/
+Serves as an example of the integration of the formio.js library with the onesait platform
+To integrate into another application, all you have to do is take the ShowForm.vue component and the onesaitPlatformServices.js service.
+
 Copyright Indra Soluciones Tecnologías de la Información, S.L.U.
 2013-2023 SPAIN
  
@@ -13,10 +18,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-This application is created with Vue2 technology
-https://v2.vuejs.org/
-Serves as an example of the integration of the formio.js library with the onesait platform
-To integrate into another application, all you have to do is take the ShowForm.vue component and the onesaitPlatformServices.js service.
 
 To run the application, first perform npm install and then npm run serve
 
@@ -49,7 +50,7 @@ name: String,
 entity: String,
 
 
-# forms
+ 
 
 ## Project setup
 ```
