@@ -15,6 +15,7 @@ import {
   getForm,
   updateData,
   updateForm,
+  generateFormFromEntity,
 } from "../services/onesaitPlatformServices";
 import { getSchema } from "@/services/onesaitPlatformServices";
 
@@ -35,14 +36,16 @@ export default {
       divIdentifier: Date.now(),
       build: null,
       notloaded: true,
+      cname: "",
+      centity: "",
     };
   },
   methods: {
     getEntity: function () {
-      return this.entity;
+      return this.centity;
     },
     getName: function () {
-      return this.name;
+      return this.cname;
     },
     createForm: function () {
       console.log("create form");
@@ -72,15 +75,36 @@ export default {
         }
       );
     },
+    buildFormFromEntity: function () {
+      console.log("build Form From Entity");
+
+      var that = this;
+      that.centity = that.entity
+      generateFormFromEntity(that.platformbase, that.centity, that.xopapikey)
+        .then((response) => {
+          window.Formio.builder(
+            document.getElementById(that.divIdentifier),
+            response.data,
+            {}
+          ).then(function (build) {
+            that.build = build;
+            that.emitDataForm();
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
 
     emitInterface() {
       this.$emit("interface", {
         createForm: () => this.createForm(),
         updateForm: () => this.updateForm(),
+        buildFormFromEntity: () => this.buildFormFromEntity(),
       });
     },
     emitDataForm() {
-      //this.$emit("dataForm", {entity:this.entity,name:this.name})
+      //this.$emit("dataForm", {entity:this.centity,name:this.cname})
       this.$emit("dataForm", {
         entity: this.getEntity(),
         name: this.getName(),
@@ -89,6 +113,9 @@ export default {
   },
   mounted: function () {
     var that = this;
+
+    that.cname = that.name;
+    that.centity = that.entity;
     //store xopapikey
     window.xopapikey = that.xopapikey;
     //store host for platform base
@@ -104,8 +131,8 @@ export default {
         //edit existing form
         getForm(that.platformbase, that.formid, that.xopapikey)
           .then(function (response) {
-            that.entity = response.data.entity;
-            that.name = response.data.name;
+            that.centity = response.data.entity;
+            that.cname = response.data.name;
             window.Formio.builder(
               document.getElementById(that.divIdentifier),
               JSON.parse(response.data.jsonSchema),
@@ -167,7 +194,6 @@ export default {
                 document
                   .querySelectorAll(".fa-refresh.fa-spin")
                   .forEach((el) => el.remove());
-                 
               });
             });
           });
