@@ -128,3 +128,18 @@ export async function updateForm(platformbase, formid, payload, xopapikey) {
   );
 }
 
+export async function generateFormFromEntity(platformbase, entity, xopapikey) {
+  return axios.get(
+    platformbase +
+    "/controlpanel/api/forms/" +
+    entity +
+    "/generateFormFromEntity",
+    {
+      headers: {
+        accept: "application/json",
+        "X-OP-APIKey": xopapikey,
+      },
+    }
+  );
+}
+
